@@ -11,7 +11,7 @@ pipeline {
             steps{
                 sh "sudo docker build . -t flaskapp"
             }
-        }
+        } 
         stage("Push to DockerHub"){
             steps{
                 withCredentials([usernamePassword(credentialsId:"dockerHub",passwordVariable:"dockerHubPass",usernameVariable:"dockerHubUser")]){

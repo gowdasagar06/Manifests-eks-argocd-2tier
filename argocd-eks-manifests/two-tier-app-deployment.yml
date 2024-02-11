@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: two-tier-app
-          image: gowdasagar/flaskapp:14 
+          image: gowdasagar/flaskapp:15 
           env:
             - name: MYSQL_HOST
               value: mysql          # this is your mysql's service clusture IP, Make sure to change it with yours

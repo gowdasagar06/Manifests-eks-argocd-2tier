@@ -2,6 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: two-tier-app
+  namespace: prod
+  annotations:
+    argocd.argoproj.io/sync-wave: "6"  
   labels:
     app: two-tier-app
 spec:
@@ -16,7 +19,7 @@ spec:
     spec:
       containers:
         - name: two-tier-app
-          image: trainwithshubham/flaskapp:latest
+          image: gowdasagar/flaskapp:latest
           env:
             - name: MYSQL_HOST
               value: mysql          # this is your mysql's service clusture IP, Make sure to change it with yours

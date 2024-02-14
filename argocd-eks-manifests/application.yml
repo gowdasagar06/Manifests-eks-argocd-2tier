@@ -9,7 +9,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/gowdasagar06/2-Tier-Flask-App.git
+    repoURL: https://github.com/gowdasagar06/Manifests-eks-argocd-2tier.git
     targetRevision: HEAD
     path: argocd-eks-manifests
   destination:

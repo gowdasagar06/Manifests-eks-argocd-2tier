@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: two-tier-app
-          image: gowdasagar/2tier-blue-green:43
+          image: gowdasagar/2tier-blue-green:44
           env:
             - name: MYSQL_HOST
               value: mysql         

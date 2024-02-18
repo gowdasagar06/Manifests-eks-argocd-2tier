@@ -1,0 +1,394 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: "2024-02-16T11:28:21Z"
+    generateName: mysql-6f864fff9-
+    labels:
+      app: mysql
+      pod-template-hash: 6f864fff9
+    name: mysql-6f864fff9-sccnm
+    namespace: prod
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: mysql-6f864fff9
+      uid: d0a555fe-119a-4220-8269-5b774686e87b
+    resourceVersion: "157065"
+    uid: b4a5036d-c090-4731-8405-106a5c62b8e5
+  spec:
+    containers:
+    - env:
+      - name: MYSQL_ROOT_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            key: MYSQL_ROOT_PASSWORD
+            name: mysql-secret
+      - name: MYSQL_DATABASE
+        value: mydb
+      - name: MYSQL_USER
+        value: admin
+      - name: MYSQL_PASSWORD
+        value: admin
+      image: mysql:latest
+      imagePullPolicy: Always
+      name: mysql
+      ports:
+      - containerPort: 3306
+        protocol: TCP
+      resources: {}
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /docker-entrypoint-initdb.d
+        name: mysql-initdb
+      - mountPath: /var/lib/mysql
+        name: mysql-pv-storage
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-6rdpp
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: ip-10-0-56-224.ap-south-1.compute.internal
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - configMap:
+        defaultMode: 420
+        name: mysql-initdb-config
+      name: mysql-initdb
+    - name: mysql-pv-storage
+      persistentVolumeClaim:
+        claimName: ebs-pvc
+    - name: kube-api-access-6rdpp
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2024-02-16T11:28:58Z"
+      status: "True"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2024-02-16T11:28:28Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2024-02-16T11:28:58Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2024-02-16T11:28:58Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2024-02-16T11:28:28Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: containerd://e3fc7fbb121563e1c41faba3fa89e8dc4424ff8d76c7655190b8e952083859c9
+      image: docker.io/library/mysql:latest
+      imageID: docker.io/library/mysql@sha256:ff5ab9cdce0b4c59704b4e2a09deed5ab8467be795e0ea20228b8528f53fcf82
+      lastState: {}
+      name: mysql
+      ready: true
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: "2024-02-16T11:28:57Z"
+    hostIP: 10.0.56.224
+    hostIPs:
+    - ip: 10.0.56.224
+    phase: Running
+    podIP: 10.0.41.200
+    podIPs:
+    - ip: 10.0.41.200
+    qosClass: BestEffort
+    startTime: "2024-02-16T11:28:28Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: "2024-02-16T11:31:37Z"
+    generateName: two-tier-app-546859dcb7-
+    labels:
+      app: two-tier-app
+      pod-template-hash: 546859dcb7
+    name: two-tier-app-546859dcb7-f97wp
+    namespace: prod
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: two-tier-app-546859dcb7
+      uid: 3b456b2b-534b-4d8f-9acf-adbaa0a27b46
+    resourceVersion: "158407"
+    uid: 3658e8f2-07e5-49c8-849b-a6d3326a746c
+  spec:
+    containers:
+    - env:
+      - name: MYSQL_HOST
+        value: mysql
+      - name: MYSQL_PASSWORD
+        value: admin
+      - name: MYSQL_USER
+        value: root
+      - name: MYSQL_DB
+        value: mydb
+      image: gowdasagar/flaskapp:latest
+      imagePullPolicy: Always
+      name: two-tier-app
+      ports:
+      - containerPort: 5000
+        protocol: TCP
+      resources: {}
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-xh94q
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: ip-10-0-56-224.ap-south-1.compute.internal
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: kube-api-access-xh94q
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2024-02-16T11:31:52Z"
+      status: "True"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2024-02-16T11:31:37Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2024-02-16T11:31:52Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2024-02-16T11:31:52Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2024-02-16T11:31:37Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: containerd://91fcfb456d3b92f61a3eef68f9bc76f991de75cc57d71a16c974839e991422ee
+      image: docker.io/gowdasagar/flaskapp:latest
+      imageID: docker.io/gowdasagar/flaskapp@sha256:162bb0ec2c735dffe5290ed9f7460d0e68605297672c2b3aec5efcda23d274da
+      lastState: {}
+      name: two-tier-app
+      ready: true
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: "2024-02-16T11:31:52Z"
+    hostIP: 10.0.56.224
+    hostIPs:
+    - ip: 10.0.56.224
+    phase: Running
+    podIP: 10.0.47.159
+    podIPs:
+    - ip: 10.0.47.159
+    qosClass: BestEffort
+    startTime: "2024-02-16T11:31:37Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: "2024-02-16T11:31:25Z"
+    generateName: two-tier-app-546859dcb7-
+    labels:
+      app: two-tier-app
+      pod-template-hash: 546859dcb7
+    name: two-tier-app-546859dcb7-gq96x
+    namespace: prod
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: two-tier-app-546859dcb7
+      uid: 3b456b2b-534b-4d8f-9acf-adbaa0a27b46
+    resourceVersion: "158257"
+    uid: 5fb9d092-f132-46c5-ab10-786e543d1c16
+  spec:
+    containers:
+    - env:
+      - name: MYSQL_HOST
+        value: mysql
+      - name: MYSQL_PASSWORD
+        value: admin
+      - name: MYSQL_USER
+        value: root
+      - name: MYSQL_DB
+        value: mydb
+      image: gowdasagar/flaskapp:latest
+      imagePullPolicy: Always
+      name: two-tier-app
+      ports:
+      - containerPort: 5000
+        protocol: TCP
+      resources: {}
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-g8nmn
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: ip-10-0-19-3.ap-south-1.compute.internal
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: kube-api-access-g8nmn
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2024-02-16T11:31:37Z"
+      status: "True"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2024-02-16T11:31:25Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2024-02-16T11:31:37Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2024-02-16T11:31:37Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2024-02-16T11:31:25Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: containerd://f4dac47d7426b79b9ad70e1fb1d0fbefd77b3f55087c7aa5a7c6d2de63fd0c58
+      image: docker.io/gowdasagar/flaskapp:latest
+      imageID: docker.io/gowdasagar/flaskapp@sha256:162bb0ec2c735dffe5290ed9f7460d0e68605297672c2b3aec5efcda23d274da
+      lastState: {}
+      name: two-tier-app
+      ready: true
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: "2024-02-16T11:31:36Z"
+    hostIP: 10.0.19.3
+    hostIPs:
+    - ip: 10.0.19.3
+    phase: Running
+    podIP: 10.0.15.250
+    podIPs:
+    - ip: 10.0.15.250
+    qosClass: BestEffort
+    startTime: "2024-02-16T11:31:25Z"
+kind: List
+metadata:
+  resourceVersion: ""
